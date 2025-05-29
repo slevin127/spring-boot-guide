@@ -83,4 +83,11 @@ public class Employee {
         this.salary = salary;
         this.phone = phone;
     }
+
+    public void setEmail(String email) {
+    }
+
+    public void setSalary(Integer salary) {
+
+    }
 }

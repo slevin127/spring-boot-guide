@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 public class EmployeeController {
-@Autowired
+    @Autowired
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
@@ -16,22 +16,34 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
 
-@GetMapping
-public List<Employee> helloWorld() {
-    return employeeService.getEmployees();
-}
-@PostMapping
+    @GetMapping
+    public List<Employee> helloWorld() {
+        return employeeService.getEmployees();
+    }
+
+    @PostMapping
     public Employee createEmployee(
             @RequestBody Employee employee
-) {
-    return (Employee) employeeService.createEmployee(employee);
-}
-@DeleteMapping("/{empleyeeId}")
+    ) {
+        return (Employee) employeeService.createEmployee(employee);
+    }
+
+    @DeleteMapping("/{empleyeeId}")
     public void deleteEmployee(
-    @PathVariable("empleyeeId") Long id
-){
-    employeeService.deleteEmployee(id);
-}
+            @PathVariable("empleyeeId") Long id
+    ) {
+        employeeService.deleteEmployee(id);
+    }
+
+    @PutMapping("/{employeeId}")
+    public void updateEmployee(
+            @PathVariable("employeeId") Long id,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "salary", required = false) Integer salary
+    ) {
+        employeeService.updateEmployee(id, email, salary);
+    }
+
 
 }
 

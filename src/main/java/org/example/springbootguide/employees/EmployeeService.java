@@ -1,10 +1,12 @@
 package org.example.springbootguide.employees;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -65,6 +67,30 @@ public class EmployeeService {
             throw new IllegalArgumentException("Employee with id " + id + " already exists");
         }
         employeeRepository.deleteById(id);
+    }
+    @Transactional
+    public void updateEmployee(
+            Long id,
+            String email,
+            Integer salary
+    ){
+        var employee = employeeRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Employee with id " + id + " does not exist")
+        );
+        if (email != null && !email.isEmpty()
+        && !email.equals(employee.getEmail())) {
+            Optional<Employee> employeeOpt = employeeRepository.findByEmail(email);
+            if (employeeOpt.isPresent()) {
+                throw new IllegalArgumentException("Employee with email " + email + " already exists");
+            }
+        employee.setEmail(email);
+        }
+        if (salary != null) {
+            if (salary <= 50000) {
+                throw new IllegalArgumentException("Salary must be greater than or equal to 50000");
+            }
+            employee.setSalary(salary);
+        }
     }
 }
 
